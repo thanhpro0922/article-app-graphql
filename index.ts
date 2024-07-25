@@ -1,26 +1,33 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
 import * as dotenv from "dotenv";
 import * as database from "./config/database";
-import Article from "./models/article.model";
+import { ApolloServer } from "apollo-server-express";
 
-dotenv.config();
+import { typeDefs } from "./typeDefs";
+import { resolvers } from "./resolvers";
 
-database.connect();
+const startServer = async () => {
+    dotenv.config();
 
-const app: Express = express();
-const port: number | string = process.env.PORT || 3000;
+    database.connect();
 
-//@ Rest API
-app.get("/articles", async (req: Request, res: Response) => {
-    const articles = await Article.find({
-        deleted: false,
+    const app: Express = express();
+    const port: number | string = process.env.PORT || 3000;
+
+    //@ GraphQL
+
+    const apolloServer = new ApolloServer({ typeDefs, resolvers });
+
+    await apolloServer.start();
+
+    apolloServer.applyMiddleware({
+        app: app,
+        path: "/graphql", //! Tạo API api này thích đặt j cx đc
     });
 
-    res.json({
-        articles: articles,
+    app.listen(port, () => {
+        console.log(`PORT ${port} Running OK`);
     });
-});
+};
 
-app.listen(port, () => {
-    console.log(`PORT ${port} Running OK`);
-});
+startServer();
