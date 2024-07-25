@@ -3,8 +3,8 @@ import * as dotenv from "dotenv";
 import * as database from "./config/database";
 import { ApolloServer } from "apollo-server-express";
 
-import { resolvers } from "./resolvers";
 import { typeDefs } from "./typeDefs/index.typeDefs";
+import { resolvers } from "./resolvers/index.resolver";
 
 const startServer = async () => {
     dotenv.config();
@@ -18,7 +18,7 @@ const startServer = async () => {
 
     const apolloServer = new ApolloServer({
         typeDefs: typeDefs,
-        resolvers,
+        resolvers: resolvers, //! ở trong js thì miễn sao 2 cái này trùng tên nhau thì cs thể viết gọn thành 1 cái thôi, nhưng ở đây cứ viết rõ ra cho dễ hiểu, sau rồi rút gọn cx đc
     });
 
     await apolloServer.start();
