@@ -1,16 +1,12 @@
-import { info } from "console";
 import { generateRandomString } from "../helpers/generate";
 import User from "../models/user.model";
 import md5 from "md5";
-import { Query } from "mongoose";
 
 export const resolversUser = {
     Query: {
-        getUser: async (_, args) => {
-            const { id } = args;
-
+        getUser: async (_, args, context) => {
             const infoUser = await User.findOne({
-                _id: id,
+                token: context["user"].token,
                 deleted: false,
             });
 

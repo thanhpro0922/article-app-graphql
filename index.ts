@@ -5,6 +5,7 @@ import { ApolloServer } from "apollo-server-express";
 
 import { typeDefs } from "./typeDefs/index.typeDefs";
 import { resolvers } from "./resolvers/index.resolver";
+import { requireAuth } from "./middlewares/auth.middleware";
 
 const startServer = async () => {
     dotenv.config();
@@ -15,10 +16,14 @@ const startServer = async () => {
     const port: number | string = process.env.PORT || 3000;
 
     //@ GraphQL
+    app.use("/graphql", requireAuth);
 
     const apolloServer = new ApolloServer({
         typeDefs: typeDefs,
         resolvers: resolvers, //! ở trong js thì miễn sao 2 cái này trùng tên nhau thì cs thể viết gọn thành 1 cái thôi, nhưng ở đây cứ viết rõ ra cho dễ hiểu, sau rồi rút gọn cx đc
+        context: ({ req }) => {
+            return { ...req };
+        },
     });
 
     await apolloServer.start();
