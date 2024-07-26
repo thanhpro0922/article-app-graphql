@@ -1,6 +1,6 @@
 export const generateRandomString = (length: number): string => {
     const characters: string =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz@123456789";
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     let result: string = "";
 

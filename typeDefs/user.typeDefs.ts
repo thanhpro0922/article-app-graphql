@@ -16,7 +16,13 @@ export const typeDefsUser = gql`
         password: String
     }
 
+    input LoginUser {
+        email: String
+        password: String
+    }
+
     type Mutation {
         registerUser(user: RegisterUserInput): User
+        loginUser(user: LoginUser): User
     }
 `;

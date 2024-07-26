@@ -1,3 +1,4 @@
+import { info } from "console";
 import { generateRandomString } from "../helpers/generate";
 import User from "../models/user.model";
 import md5 from "md5";
@@ -33,6 +34,35 @@ export const resolversUser = {
                     token: data.token,
                 };
             }
+        },
+        loginUser: async (_, args) => {
+            const { email, password } = args.user;
+
+            const infoUser = await User.findOne({
+                email: email,
+                deleted: false,
+            });
+
+            if (!infoUser) {
+                return {
+                    code: 400,
+                    message: "Email ko ton tai!",
+                };
+            }
+            if (md5(password) !== infoUser.password) {
+                return {
+                    code: 400,
+                    message: "Sai Password!",
+                };
+            }
+            return {
+                code: 200,
+                message: "Login success!",
+                id: infoUser.id,
+                fullName: infoUser.fullName,
+                email: infoUser.email,
+                token: infoUser.token,
+            };
         },
     },
 };
