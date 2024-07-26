@@ -21,6 +21,7 @@ const startServer = async () => {
     const apolloServer = new ApolloServer({
         typeDefs: typeDefs,
         resolvers: resolvers, //! ở trong js thì miễn sao 2 cái này trùng tên nhau thì cs thể viết gọn thành 1 cái thôi, nhưng ở đây cứ viết rõ ra cho dễ hiểu, sau rồi rút gọn cx đc
+        introspection: true,
         context: ({ req }) => {
             return { ...req };
         },
