@@ -2,8 +2,35 @@ import { info } from "console";
 import { generateRandomString } from "../helpers/generate";
 import User from "../models/user.model";
 import md5 from "md5";
+import { Query } from "mongoose";
 
 export const resolversUser = {
+    Query: {
+        getUser: async (_, args) => {
+            const { id } = args;
+
+            const infoUser = await User.findOne({
+                _id: id,
+                deleted: false,
+            });
+
+            if (infoUser) {
+                return {
+                    code: 200,
+                    message: "Success!",
+                    id: infoUser.id,
+                    fullName: infoUser.fullName,
+                    email: infoUser.email,
+                    token: infoUser.token,
+                };
+            } else {
+                return {
+                    code: 400,
+                    message: "InSuccess!",
+                };
+            }
+        },
+    },
     Mutation: {
         registerUser: async (_, args) => {
             const { user } = args;
